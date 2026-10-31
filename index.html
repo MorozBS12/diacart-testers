@@ -113,6 +113,17 @@ footer a{color:var(--dim);border-bottom:1px solid var(--edge)}
 }
 
 /* ---- оформление: тронный зал ---- */
+.pc .bust{display:block;height:130px;margin:-6px auto 6px;image-rendering:pixelated;filter:drop-shadow(0 8px 10px rgba(0,0,0,.6)) drop-shadow(0 0 14px rgba(var(--c),.35))}
+.pc.p1 .bust{height:160px}
+.pc .av.mob{display:none}
+.av.head{border-radius:8px;image-rendering:pixelated;box-shadow:0 0 0 2px rgba(242,201,76,.25)}
+@media (max-width:620px){
+  .pc .bust{display:none}
+  .pc .av.mob{display:block;width:44px;height:44px;grid-row:span 2;margin:0}
+  .pc,.pc.p1{grid-template-columns:auto auto 1fr auto}
+  .pc .nm,.pc .rl{grid-column:3}
+  .pc .num,.pc.p1 .num,.pc .lbl{grid-column:4}
+}
 :root{--dia:#f2c94c}
 html{background:#0b0906}
 body{
@@ -197,6 +208,12 @@ function avatar(t, cls){
   return `<span class="av ${cls||''}">${esc((t.name || '?')[0].toUpperCase())}</span>`;
 }
 
+// Скин тестера (если известен его ник в Minecraft), иначе аватарка Discord
+const skinBust = t => `<img class="bust" src="https://visage.surgeplay.com/bust/256/${encodeURIComponent(t.mc)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://mc-heads.net/body/${encodeURIComponent(t.mc)}/180'">`;
+const head = (t, cls) => t.mc
+  ? `<img class="av head ${cls||''}" src="https://mc-heads.net/avatar/${encodeURIComponent(t.mc)}/64" alt="" loading="lazy">`
+  : avatar(t, cls);
+
 function render(){
   document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.p === period));
   const main = document.getElementById('main');
@@ -214,7 +231,7 @@ function render(){
     const place = [2, 1, 3][i];
     return `<div class="pc p${place}">
       <span class="place">${place}</span>
-      ${avatar(t)}
+      ${t.mc ? skinBust(t) + head(t, 'mob') : avatar(t)}
       <div class="nm">${esc(t.name)}</div>
       <div class="rl">${esc(t.role || (t.username ? '@' + t.username : ''))}</div>
       <div class="num">${t.tests}</div>
@@ -226,7 +243,7 @@ function render(){
   const rows = list.slice(3).map((t, i) => `
     <div class="row">
       <span class="pos">${i + 4}</span>
-      ${avatar(t)}
+      ${head(t)}
       <div class="who">
         <b>${esc(t.name)}</b>
         <small>${esc(t.role || '')}${t.role && t.last ? ' · ' : ''}${t.last ? 'последний ' + ago(t.last) : ''}</small>
