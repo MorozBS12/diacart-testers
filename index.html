@@ -115,6 +115,8 @@ footer a{color:var(--dim);border-bottom:1px solid var(--edge)}
 }
 
 /* ---- оформление: тронный зал ---- */
+.tabs.kinds{margin-bottom:10px;flex-wrap:wrap}
+.tabs.kinds button{font-size:13px;padding:7px 14px}
 .pc .bust{display:block;height:130px;margin:-6px auto 6px;image-rendering:pixelated;filter:drop-shadow(0 8px 10px rgba(0,0,0,.6)) drop-shadow(0 0 14px rgba(var(--c),.35))}
 .pc.p1 .bust{height:160px}
 .pc .av.mob{display:none}
@@ -171,6 +173,11 @@ footer{color:#7d7464}
     <div class="stats" id="stats"></div>
   </section>
 
+  <nav class="tabs kinds" id="kinds">
+    <button data-k="all">Все тесты</button>
+    <button data-k="high">Высокие (HT3+)</button>
+    <button data-k="low">Квалификация</button>
+  </nav>
   <nav class="tabs" id="tabs">
     <button data-p="week">Неделя</button>
     <button data-p="month">Месяц</button>
@@ -191,6 +198,8 @@ const WORD = n => (n % 10 === 1 && n % 100 !== 11 ? 'тест' : n % 10 >= 2 && 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let data = null;
 let period = 'month';
+let kind = 'all';
+try { kind = localStorage.getItem('testers-kind') || 'all'; } catch (e) {}
 try { period = localStorage.getItem('testers-period') || 'month'; } catch (e) {}
 
 function ago(ms){
@@ -219,8 +228,13 @@ const mcOf = t => t.mc || (/^[A-Za-z0-9_]{3,16}$/.test(t.name || '') ? t.name : 
 function render(){
   document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.p === period));
   const main = document.getElementById('main');
-  const p = data.periods[period];
-  const list = p.testers;
+  document.querySelectorAll('#kinds button').forEach(b => b.classList.toggle('on', b.dataset.k === kind));
+  const p0 = data.periods[period];
+  // сколько тестов считаем: все, только высокие или только квалификация
+  const cnt = t => kind === 'high' ? t.high : kind === 'low' ? t.tests - t.high : t.tests;
+  const list = p0.testers.map(t => ({...t, tests: cnt(t), high: kind === 'all' ? t.high : 0}))
+    .filter(t => t.tests > 0).sort((a, b) => b.tests - a.tests || b.last - a.last);
+  const p = {total: list.reduce((n, t) => n + t.tests, 0), testers: list};
   document.getElementById('stats').innerHTML =
     `<div class="stat"><b>${p.total}</b><small>${WORD(p.total)} проведено</small></div>` +
     `<div class="stat"><b>${list.length}</b><small>активных тестеров</small></div>`;
@@ -273,6 +287,12 @@ async function load(){
   render();
 }
 
+document.getElementById('kinds').addEventListener('click', e => {
+  const b = e.target.closest('button'); if(!b) return;
+  kind = b.dataset.k;
+  try { localStorage.setItem('testers-kind', kind); } catch (err) {}
+  if(data) render();
+});
 document.getElementById('tabs').addEventListener('click', e => {
   const b = e.target.closest('button'); if(!b) return;
   period = b.dataset.p;
