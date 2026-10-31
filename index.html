@@ -218,13 +218,22 @@ function avatar(t, cls){
 }
 
 // Скин тестера (если известен его ник в Minecraft), иначе аватарка Discord
-const skinBust = t0 => { const t = {mc: mcOf(t0)}; return `<img class="bust" src="https://visage.surgeplay.com/bust/256/${encodeURIComponent(t.mc)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://mc-heads.net/body/${encodeURIComponent(t.mc)}/180'">`; };
-const head = (t0, cls) => { const t = {mc: mcOf(t0)}; return true
-  ? `<img class="av head ${cls||''}" src="https://visage.surgeplay.com/bust/128/${encodeURIComponent(t.mc)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://mc-heads.net/head/${encodeURIComponent(t.mc)}/128'">`
-  : ''; };
+// 3D-бюст скина: если один сервис не ответил, пробуем следующий (везде бюст, а не просто голова)
+const BUST = n => [
+  `https://visage.surgeplay.com/bust/256/${n}`,
+  `https://starlightskins.lunareclipse.studio/render/default/${n}/bust`,
+  `https://mc-heads.net/body/${n}/180`,
+];
+function nextSkin(img){
+  const list = JSON.parse(img.dataset.src || '[]');
+  const i = +(img.dataset.i || 0) + 1;
+  if(i < list.length){ img.dataset.i = i; img.src = list[i]; } else img.onerror = null;
+}
+const bustImg = (t0, cls) => { const urls = BUST(encodeURIComponent(mcOf(t0)));
+  return `<img class="${cls}" src="${urls[0]}" data-src='${JSON.stringify(urls)}' alt="" loading="lazy" onerror="nextSkin(this)">`; };
+const skinBust = t0 => bustImg(t0, 'bust');
+const head = (t0, c) => bustImg(t0, 'av head ' + (c || ''));
 
-// ник для скина: из тир-листа, иначе имя в Discord, если оно похоже на ник Minecraft (иначе будет Стив)
-const mcOf = t => t.mc || (/^[A-Za-z0-9_]{3,16}$/.test(t.name || '') ? t.name : (/^[A-Za-z0-9_]{3,16}$/.test(t.username || '') ? t.username : 'MHF_Steve'));
 function render(){
   document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.p === period));
   const main = document.getElementById('main');
