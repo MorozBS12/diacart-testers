@@ -222,7 +222,9 @@ function avatar(t, cls){
 const BUST = n => [
   `https://visage.surgeplay.com/bust/256/${n}`,
   `https://starlightskins.lunareclipse.studio/render/default/${n}/bust`,
-  `https://mc-heads.net/body/${n}/180`,
+  // ник не нашёлся или сервисы не ответили — Стив, тоже 3D-бюстом
+  'https://visage.surgeplay.com/bust/256/MHF_Steve',
+  'https://starlightskins.lunareclipse.studio/render/default/MHF_Steve/bust',
 ];
 function nextSkin(img){
   const list = JSON.parse(img.dataset.src || '[]');
