@@ -157,6 +157,60 @@ footer{color:#7d7464}
 @keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.9}100%{transform:translateY(-105vh) translateX(30px);opacity:0}}
 .wrap{position:relative;z-index:1}
 @media (prefers-reduced-motion:reduce){.sparks{display:none}}
+
+/* ---- v3: пьедестал из блоков, как на тир-листе; спокойные кнопки и строки ---- */
+:root{--b:clamp(34px,6.2vw,62px)}
+.hero{padding:54px 0 22px}
+.hero h1{font-size:clamp(38px,8vw,64px);filter:none;text-shadow:0 4px 0 rgba(0,0,0,.6)}
+.hero h1 span{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:#f2c94c}
+.stats{gap:0;margin-top:14px;color:#d8cbb0;font-size:15px;text-shadow:0 2px 6px #000}
+.stat{background:none;border:0;border-radius:0;padding:0 14px;min-width:0;backdrop-filter:none;-webkit-backdrop-filter:none;display:flex;align-items:baseline;gap:7px}
+.stat+.stat{border-left:1px solid rgba(242,201,76,.25)}
+.stat b{display:inline;font-size:22px;color:#f6dc8a}
+.stat small{font-size:14px;color:#d8cbb0}
+
+.pick{display:flex;justify-content:center;gap:10px 18px;flex-wrap:wrap;margin:8px 0 0}
+.tabs,.tabs.kinds{margin:0;gap:0;background:rgba(14,11,7,.7);border:1px solid rgba(242,201,76,.2);border-radius:8px;padding:3px}
+.tabs button,.tabs.kinds button{border:0;border-radius:6px;background:none;backdrop-filter:none;-webkit-backdrop-filter:none;font-size:13.5px;padding:7px 13px;color:#b9ad95;transition:none}
+.tabs button:hover{color:#fff}
+.tabs button.on{background:#f2c94c;color:#1a1206;border:0;box-shadow:none}
+
+.stage{display:flex;justify-content:center;align-items:flex-end;margin:34px 0 34px}
+.step{display:flex;flex-direction:column;align-items:center;width:calc(var(--b) * 3)}
+.step .who{display:flex;flex-direction:column;align-items:center;min-width:0;max-width:100%}
+.nametag{display:flex;align-items:center;gap:7px;max-width:calc(var(--b) * 3 + 20px);background:rgba(0,0,0,.55);padding:4px 7px 4px 9px;margin-bottom:8px;font-size:14.5px;font-weight:600;color:#fff;white-space:nowrap}
+.nametag b{font-weight:600;overflow:hidden;text-overflow:ellipsis}
+.nametag i{font-style:normal;font:700 13px 'Pixelify Sans',sans-serif;color:#f6dc8a;padding:2px 5px;background:rgba(255,255,255,.1)}
+.step .who .skin{height:calc(var(--b) * 2.5);width:auto;max-width:100%;object-fit:contain;position:relative;z-index:1;margin-bottom:-3px;image-rendering:pixelated;filter:drop-shadow(0 6px 8px rgba(0,0,0,.55))}
+.step .role{font-size:12px;color:#d8cbb0;text-shadow:0 1px 4px #000;margin-bottom:5px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.blocks{width:100%;box-shadow:0 18px 26px -14px rgba(0,0,0,.9)}
+.blk{height:var(--b);position:relative;background-size:var(--b) var(--b);image-rendering:pixelated}
+.gold .blk{background-color:#f2c632;background-image:var(--tex-gold,none)}
+.iron .blk{background-color:#d8d8d8;background-image:var(--tex-iron,none)}
+.copper .blk{background-color:#c4693a;background-image:var(--tex-copper,none)}
+.blk .rk{position:absolute;inset:0;display:grid;place-items:center;font-family:'Pixelify Sans',sans-serif;font-size:calc(var(--b) * .56);color:rgba(0,0,0,.4);text-shadow:0 2px 0 rgba(255,255,255,.28)}
+
+.list{gap:4px}
+.row{grid-template-columns:34px 40px 1fr 150px 64px;border:0;border-radius:8px;padding:7px 14px 7px 8px;background:rgba(18,14,9,.72);backdrop-filter:none;-webkit-backdrop-filter:none;transition:none}
+.row:hover{transform:none;background:rgba(34,27,17,.85)}
+.row .av{width:40px;height:40px}
+.row .who small{display:block;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat small{white-space:nowrap}
+.row .bar{margin:0;height:6px;border-radius:0;background:rgba(255,255,255,.07)}
+.row .bar i{border-radius:0;background:#f2c94c}
+.row .cnt b{font-size:19px}
+.empty,.loading{backdrop-filter:none;-webkit-backdrop-filter:none;border:0;border-radius:8px;background:rgba(18,14,9,.72)}
+@media (max-width:620px){
+  .row{grid-template-columns:24px 36px 1fr 56px;gap:10px;padding:7px 10px 7px 6px}
+  .row .bar{display:none}
+  .row .av{width:36px;height:36px}
+  .nametag{font-size:12px;padding:3px 5px 3px 6px;gap:5px}
+  .nametag i{font-size:11.5px;padding:1px 4px}
+  .step .role{display:none}
+  .stage{margin:26px 0 24px}
+  .hero{padding:34px 0 16px}
+  .tabs button,.tabs.kinds button{padding:7px 10px;font-size:13px}
+}
 </style>
 </head>
 <body>
@@ -164,7 +218,7 @@ footer{color:#7d7464}
 <div class="wrap">
   <header>
     <a class="brand" href="https://101tiers.xyz"><b>101</b> DiaCart</a>
-    <a class="back" href="https://101tiers.xyz">← Тир-лист</a>
+    <a class="back" href="https://101tiers.xyz">Тир-лист</a>
   </header>
 
   <section class="hero">
@@ -173,6 +227,7 @@ footer{color:#7d7464}
     <div class="stats" id="stats"></div>
   </section>
 
+  <div class="pick">
   <nav class="tabs kinds" id="kinds">
     <button data-k="all">Все тесты</button>
     <button data-k="high">Высокие (HT3+)</button>
@@ -183,6 +238,7 @@ footer{color:#7d7464}
     <button data-p="month">Месяц</button>
     <button data-p="all">Всё время</button>
   </nav>
+  </div>
 
   <main id="main"><div class="loading">Загрузка…</div></main>
 
@@ -235,6 +291,15 @@ function nextSkin(img){
 }
 const bustImg = (t0, cls) => { const urls = BUST(encodeURIComponent(mcOf(t0)));
   return `<img class="${cls}" src="${urls[0]}" data-src='${JSON.stringify(urls)}' alt="" loading="lazy" onerror="nextSkin(this)">`; };
+// скин в полный рост для пьедестала
+const FULL = n => [
+  `https://visage.surgeplay.com/full/384/${n}`,
+  `https://starlightskins.lunareclipse.studio/render/default/${n}/full`,
+  'https://visage.surgeplay.com/full/384/MHF_Steve',
+  'https://starlightskins.lunareclipse.studio/render/default/MHF_Steve/full',
+];
+const fullImg = t0 => { const urls = FULL(encodeURIComponent(mcOf(t0)));
+  return `<img class="skin" src="${urls[0]}" data-src='${JSON.stringify(urls)}' alt="" onerror="nextSkin(this)">`; };
 const skinBust = t0 => bustImg(t0, 'bust');
 const head = (t0, c) => bustImg(t0, 'av head ' + (c || ''));
 
@@ -249,24 +314,23 @@ function render(){
     .filter(t => t.tests > 0).sort((a, b) => b.tests - a.tests || b.last - a.last);
   const p = {total: list.reduce((n, t) => n + t.tests, 0), testers: list};
   document.getElementById('stats').innerHTML =
-    `<div class="stat"><b>${p.total}</b><small>${WORD(p.total)} проведено</small></div>` +
-    `<div class="stat"><b>${list.length}</b><small>активных тестеров</small></div>`;
+    `<div class="stat"><b>${p.total}</b><small>${WORD(p.total)}</small></div>` +
+    `<div class="stat"><b>${list.length}</b><small>${list.length % 10 === 1 && list.length % 100 !== 11 ? 'тестер' : list.length % 10 >= 2 && list.length % 10 <= 4 && (list.length % 100 < 12 || list.length % 100 > 14) ? 'тестера' : 'тестеров'}</small></div>`;
   if(!list.length){ main.innerHTML = '<div class="empty">За этот период тестов пока не было.</div>'; return; }
 
   const top = list.slice(0, 3);
-  const order = [top[1], top[0], top[2]];
-  const podium = `<div class="podium">${order.map((t, i) => {
-    if(!t) return '<div></div>';
-    const place = [2, 1, 3][i];
-    return `<div class="pc p${place}">
-      <span class="place">${place}</span>
-      ${skinBust(t)}
-      <div class="nm">${esc(t.name)}</div>
-      <div class="rl">${esc(t.role || (t.username ? '@' + t.username : ''))}</div>
-      <div class="num">${t.tests}</div>
-      <div class="lbl">${WORD(t.tests)}${t.high ? ` · ${t.high} высоких` : ''}</div>
-    </div>`;
-  }).join('')}</div>`;
+  const MAT = {1: 'gold', 2: 'iron', 3: 'copper'}, HGT = {1: 3, 2: 2, 3: 1};
+  const step = r => {
+    const t = top[r - 1];
+    const blocks = Array.from({length: HGT[r]}, (_, k) => `<div class="blk">${k === 0 ? `<span class="rk">${r}</span>` : ''}</div>`).join('');
+    const who = t ? `<div class="who">
+        <span class="nametag"><b>${esc(t.name)}</b><i>${t.tests}</i></span>
+        <span class="role">${esc(t.role || '')}${t.high ? `${t.role ? ' · ' : ''}${t.high} высоких` : ''}</span>
+        ${fullImg(t)}
+      </div>` : '';
+    return `<div class="step ${MAT[r]}">${who}<div class="blocks">${blocks}</div></div>`;
+  };
+  const podium = `<div class="stage">${step(2)}${step(1)}${step(3)}</div>`;
 
   const max = list[0].tests || 1;
   const rows = list.slice(3).map((t, i) => `
@@ -276,13 +340,29 @@ function render(){
       <div class="who">
         <b>${esc(t.name)}</b>
         <small>${esc(t.role || '')}${t.role && t.last ? ' · ' : ''}${t.last ? 'последний ' + ago(t.last) : ''}</small>
-        <div class="bar"><i style="width:${Math.max(4, Math.round(t.tests / max * 100))}%"></i></div>
       </div>
+      <div class="bar"><i style="width:${Math.max(4, Math.round(t.tests / max * 100))}%"></i></div>
       <div class="cnt"><b>${t.tests}</b><small>${WORD(t.tests)}</small></div>
     </div>`).join('');
 
   main.innerHTML = podium + (rows ? `<div class="list">${rows}</div>` : '');
 }
+
+function blockTex(base, hi, lo, seed){
+  const c = document.createElement('canvas'); c.width = c.height = 16;
+  const x = c.getContext('2d'); let s = seed >>> 0;
+  const rnd = () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  for(let i = 0; i < 16; i++) for(let j = 0; j < 16; j++){ x.fillStyle = base[Math.floor(rnd() * base.length)]; x.fillRect(i, j, 1, 1); }
+  x.fillStyle = hi; x.fillRect(0, 0, 16, 1); x.fillRect(0, 0, 1, 16);
+  x.fillStyle = lo; x.fillRect(0, 15, 16, 1); x.fillRect(15, 0, 1, 16);
+  return `url("${c.toDataURL()}")`;
+}
+try{
+  const r = document.documentElement.style;
+  r.setProperty('--tex-gold',   blockTex(['#f7d84a','#fbe46a','#f2c632','#f5d040','#eec22c'], '#fff4a3', '#b8860b', 7));
+  r.setProperty('--tex-iron',   blockTex(['#dedede','#e8e8e8','#d2d2d2','#cacaca','#d9d9d9'], '#f7f7f7', '#8f8f8f', 11));
+  r.setProperty('--tex-copper', blockTex(['#c86f3d','#d47d48','#b96034','#c4693a','#cf7642'], '#eba374', '#7a3b1d', 13));
+}catch(e){}
 
 async function getJson(url, ms){
   const c = new AbortController(); const t = setTimeout(() => c.abort(), ms);
